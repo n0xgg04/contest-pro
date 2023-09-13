@@ -5,6 +5,8 @@ import { Layout, Space, Typography } from "antd";
 import NavigationBar from "@/components/global/NavigationBar";
 import { MantineProvider } from "@mantine/core";
 import { useEffect, useState } from "react";
+import Loading from "@/layouts/Loading";
+import { cn } from "@/lib/utils";
 
 type Props = {
   dashboard: React.ReactNode;
@@ -19,17 +21,42 @@ export default function MainLayout({
   contest,
   children,
 }: Props): React.JSX.Element {
-  const [isClient, setIsClient] = useState(false);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
+  const handleLoaded = React.useCallback((e: any) => {
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
-    setIsClient(true);
+    if (document) {
+      document.addEventListener("load", handleLoaded);
+    }
+
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => {
+      if (document) {
+        document.removeEventListener("load", handleLoaded);
+      }
+
+      clearTimeout(timeout);
+    };
   }, []);
+
   return (
     <React.Fragment>
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <Layout className="w-screen h-screen fixed bg-[url('/assets/images/home-banner-bg.png')] bg-no-repeat bg-contain bg-top bg-[rgb(17,14,39)] pb-20">
+        <Loading show={isLoading} />
+        <Layout
+          className={cn(
+            "w-screen h-[100vh] bg-[url('/assets/images/home-banner-bg.png')] duration-300 ease-out bg-no-repeat bg-contain bg-top bg-[rgb(17,14,39)]",
+            isLoading ? "opacity-0" : "opacity-100",
+          )}
+        >
           <NavigationBar />
-          <Content className="flex flex-col items-center justify-center w-full overflow-y-auto">
+          <Content className="w-full overflow-y-auto">
             {dashboard}
             {children}
             {contest}

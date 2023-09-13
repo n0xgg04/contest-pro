@@ -13,7 +13,7 @@ const { Text } = Typography;
 
 export default function Page(props: Props): React.JSX.Element {
   return (
-    <Space className="w-full bg-black flex flex-col items-center py-20">
+    <Space className="w-full bg-black flex flex-col items-center py-20 mt-20 md:mt-0">
       <Space align="center" direction="vertical">
         <Text
           className={cn(oswald.className, "uppercase text-md text-red-600")}
@@ -29,7 +29,9 @@ export default function Page(props: Props): React.JSX.Element {
           Contest PRO
         </Text>
       </Space>
-      <Space direction="horizontal">
+      <Space direction="horizontal" className="mt-10 gap-x-10">
+        <ContestCard />
+        <ContestCard />
         <ContestCard />
       </Space>
     </Space>

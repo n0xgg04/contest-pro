@@ -85,3 +85,6 @@
     color: #fff !important;
 }
 
+html{
+  scroll-behavior: smooth;
+}
